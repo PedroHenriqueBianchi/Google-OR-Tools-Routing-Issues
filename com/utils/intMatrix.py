@@ -57,7 +57,7 @@ if __name__ == '__main__':
     from os import getcwd
     from os.path import dirname
     d2_matrix = IntMatrix(rows_size=280, columns_size=280)
-    d2_matrix.construct_matrix_from_euclid_int_dist_2d_file(file_path=r"{}\tsp\files\TSP_a280.txt".format(dirname(getcwd())))
+    d2_matrix.construct_matrix_from_euclid_int_dist_2d_file(file_path=r"{}\tsp\files\a280\TSP_a280.txt".format(dirname(getcwd())))
     print(len(d2_matrix.matrix))
     d2_matrix.matrix_printer()
 

@@ -7,7 +7,7 @@ from os.path import dirname
 
 def create_data_model():
     distance_matrix = IntMatrix(rows_size=280, columns_size=280)
-    local_file_path = r"{}\tsp\files\TSP_a280.txt".format(dirname(getcwd()))
+    local_file_path = r"{}\tsp\files\a280\TSP_a280.txt".format(dirname(getcwd()))
     distance_matrix.construct_matrix_from_euclid_int_dist_2d_file(file_path=local_file_path)
 
     data = {'distance_matrix': distance_matrix.matrix, 'num_vehicles': 1, 'depot': 0}
@@ -131,10 +131,11 @@ def main(time_limit, log_search):
         print_solution(manager, routing, solution, strategy="Metaheuristic - GUIDED_LOCAL_SEARCH", time_limit=time_limit)
 
     ''' Printing Optimum solution from TSPLIB '''
-    local_opt_solution_file_path = r"{}\tsp\files\TSP_a280_opt_tour.txt".format(dirname(getcwd()))
+    local_opt_solution_file_path = r"{}\tsp\files\a280\TSP_a280_opt_tour.txt".format(dirname(getcwd()))
     print_opt_solution(opt_file_path=local_opt_solution_file_path,
                        distance_matrix=data['distance_matrix'])
 
 
 if __name__ == '__main__':
     main(time_limit=5, log_search=False)
+    # main(time_limit=703, log_search=False)
