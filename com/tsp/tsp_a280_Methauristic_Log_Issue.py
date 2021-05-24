@@ -1,12 +1,22 @@
 from ortools.constraint_solver import routing_enums_pb2
 from ortools.constraint_solver import pywrapcp
+from ortools.init import pywrapinit
 from com.utils.intMatrix import IntMatrix
-from os import getcwd
+from com.utils.streamToLogger import StreamToLogger
+from os import getcwd, environ
 from os.path import dirname
-from logging import basicConfig, getLogger
-from logging import INFO
+from logging import basicConfig, getLogger, StreamHandler, Formatter
+from logging import INFO, ERROR, DEBUG, NOTSET
 from pytz import timezone
 from datetime import datetime
+import sys
+
+
+# environ['GLOG_minloglevel'] = "0"
+# environ['GLOG_log_dir'] = r"{}\tsp\files\a280\logs".format(dirname(getcwd()))
+# environ['GLOG_logbufsecs'] = "1"
+# environ['GLOG_logtostderr'] = "0"
+# environ['GLOG_stderrthreshold'] = "3"
 
 
 file_name = f"tsp_a280_{datetime.now(timezone('America/Sao_Paulo'))}".replace(" ", "_").replace(".", "_").replace(":", "_")
@@ -16,11 +26,43 @@ log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
 basicConfig(filename=r"{}\tsp\files\a280\logs\{}".format(dirname(getcwd()), file_name),
             filemode='a',
-            level=INFO,
+            level=NOTSET,
             format=log_format)
 
 
 logger = getLogger()
+
+# pywrapinit.CppBridge.InitLogging(r"{}\tsp\files\a280\logs\{}".format(dirname(getcwd()), f"{file_name}test"))
+# cpp_flags = pywrapinit.CppFlags()
+# cpp_flags.logtostderr = False
+# cpp_flags.log_prefix = True
+# pywrapinit.CppBridge.SetFlags(cpp_flags)
+
+# handler = StreamHandler(sys.stderr)
+# handler.setLevel(INFO)
+# formatter = Formatter(log_format)
+# handler.setFormatter(formatter)
+#
+# logger.addHandler(handler)
+#
+# handler = StreamHandler(sys.stdout)
+# handler.setLevel(INFO)
+# formatter = Formatter(log_format)
+# handler.setFormatter(formatter)
+#
+# logger.addHandler(handler)
+
+# stdout_logger = getLogger('STDOUT')
+# slout = StreamToLogger(stdout_logger, INFO)
+# sys.stdout = slout
+#
+# stderr_logger = getLogger('STDERR')
+# slerr = StreamToLogger(stderr_logger, ERROR)
+# sys.stderr = slerr
+#
+# stdin_logger = getLogger('STDIN')
+# slin = StreamToLogger(stdin_logger, INFO)
+# sys.stdin = slin
 
 
 def create_data_model():
@@ -40,21 +82,19 @@ def print_solution(manager, routing, solution, strategy, time_limit=None):
     else:
         print(f'Solution achieved by {strategy} strategy with time limit on {time_limit} seconds')
         logger.info(f'Solution achieved by {strategy} strategy with time limit on {time_limit} seconds')
-
-    if solution is not None:
-        print(f'Objective: {format(solution.ObjectiveValue())} Unit of Measure')
-        logger.info(f'Objective: {format(solution.ObjectiveValue())} Unit of Measure')
-        index = routing.Start(0)
-        plan_output = 'Route for vehicle 1:\n'
-        route_distance = 0
-        while not routing.IsEnd(index):
-            plan_output += f' {format(manager.IndexToNode(index) + 1)} ->'
-            previous_index = index
-            index = solution.Value(routing.NextVar(index))
-            route_distance += routing.GetArcCostForVehicle(previous_index, index, 0)
-        plan_output += f' {format(manager.IndexToNode(index) + 1)}\n'
-        print(plan_output)
-        logger.info(plan_output)
+    print(f'Objective: {format(solution.ObjectiveValue())} Unit of Measure')
+    logger.info(f'Objective: {format(solution.ObjectiveValue())} Unit of Measure')
+    index = routing.Start(0)
+    plan_output = 'Route for vehicle 1:\n'
+    route_distance = 0
+    while not routing.IsEnd(index):
+        plan_output += f' {format(manager.IndexToNode(index) + 1)} ->'
+        previous_index = index
+        index = solution.Value(routing.NextVar(index))
+        route_distance += routing.GetArcCostForVehicle(previous_index, index, 0)
+    plan_output += f' {format(manager.IndexToNode(index) + 1)}\n'
+    print(plan_output)
+    logger.info(plan_output)
 
 
 def print_opt_solution(opt_file_path, distance_matrix):
@@ -117,7 +157,8 @@ def main(time_limit, log_search):
 
     solution = routing.SolveWithParameters(search_parameters)
 
-    print_solution(manager, routing, solution, strategy="PATH_CHEAPEST_ARC")
+    if solution:
+        print_solution(manager, routing, solution, strategy="PATH_CHEAPEST_ARC")
 
     ''' Solving with first solution heuristic - GLOBAL_CHEAPEST_ARC '''
     # Resetting Routing Model.
@@ -134,7 +175,8 @@ def main(time_limit, log_search):
 
     solution = routing.SolveWithParameters(search_parameters)
 
-    print_solution(manager, routing, solution, strategy="GLOBAL_CHEAPEST_ARC")
+    if solution:
+        print_solution(manager, routing, solution, strategy="GLOBAL_CHEAPEST_ARC")
 
     ''' Solving with Metaheuristic - GUIDED_LOCAL_SEARCH '''
     # Resetting Routing Model.
@@ -153,7 +195,8 @@ def main(time_limit, log_search):
 
     solution = routing.SolveWithParameters(search_parameters)
 
-    print_solution(manager, routing, solution, strategy="Metaheuristic - GUIDED_LOCAL_SEARCH", time_limit=time_limit)
+    if solution:
+        print_solution(manager, routing, solution, strategy="Metaheuristic - GUIDED_LOCAL_SEARCH", time_limit=time_limit)
 
     ''' Printing Optimum solution from TSPLIB '''
     local_opt_solution_file_path = r"{}\tsp\files\a280\TSP_a280_opt_tour.txt".format(dirname(getcwd()))
@@ -162,4 +205,9 @@ def main(time_limit, log_search):
 
 
 if __name__ == '__main__':
-    main(time_limit=703, log_search=False)
+    main(time_limit=2, log_search=True)
+    # main(time_limit=703, log_search=False)
+
+
+#Melhorar o log
+#Depois partir para soluções do problema de Rio Claro
