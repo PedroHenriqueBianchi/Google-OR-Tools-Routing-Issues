@@ -3,16 +3,16 @@ from com.utils.matrix import Matrix
 
 class FloatMatrix(Matrix):
     def construct_matrix_from_euclid_float_dist_2d_file(self, file_path):
-        points_matrix = self.make_euclid_2d_float_matrix_from_a_file(file_path=file_path)
+        self.points_matrix = self.make_euclid_2d_float_matrix_from_a_file(file_path=file_path)
 
         for i in range(self.rows_size):
             self.matrix[i][i] = 0
 
             for j in range(i + 1, self.columns_size):
-                euclid_dist = self.calc_euclid_dist(x0=points_matrix[i][0],
-                                                    x1=points_matrix[j][0],
-                                                    y0=points_matrix[i][1],
-                                                    y1=points_matrix[j][1])
+                euclid_dist = self.calc_euclid_dist(x0=self.points_matrix[i][0],
+                                                    x1=self.points_matrix[j][0],
+                                                    y0=self.points_matrix[i][1],
+                                                    y1=self.points_matrix[j][1])
 
                 self.matrix[i][j] = euclid_dist
                 self.matrix[j][i] = euclid_dist

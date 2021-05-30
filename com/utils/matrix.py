@@ -5,6 +5,7 @@ class Matrix:
     matrix = None
     rows_size = None
     columns_size = None
+    points_matrix = None
 
     def __init__(self, rows_size, columns_size):
         self.rows_size = rows_size
