@@ -3,7 +3,7 @@ from com.utils.matrix import Matrix
 
 class FloatMatrix(Matrix):
     def construct_matrix_from_euclid_float_dist_2d_file(self, file_path):
-        self.points_matrix = self.make_euclid_2d_float_matrix_from_a_file(file_path=file_path)
+        self.points_matrix = self.make_euclid_2d_distance_float_matrix_from_a_file(file_path=file_path)
 
         for i in range(self.rows_size):
             self.matrix[i][i] = 0
@@ -18,7 +18,7 @@ class FloatMatrix(Matrix):
                 self.matrix[j][i] = euclid_dist
 
     @classmethod
-    def make_euclid_2d_float_matrix_from_a_file(cls, file_path):
+    def make_euclid_2d_distance_float_matrix_from_a_file(cls, file_path):
         return_matrix = []
         euclidian_points_file = open(file=file_path, mode='r')
 

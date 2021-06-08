@@ -4,7 +4,7 @@ from math import pow
 
 class CientificNotationMatrix(Matrix):
     def construct_matrix_from_euclid_int_dist_2d_file(self, file_path):
-        self.points_matrix = self.make_euclid_2d_int_matrix_from_a_file(file_path=file_path)
+        self.points_matrix = self.make_euclid_2d_distance_int_matrix_from_a_file(file_path=file_path)
 
         for i in range(self.rows_size):
             self.matrix[i][i] = 0
@@ -19,19 +19,19 @@ class CientificNotationMatrix(Matrix):
                 self.matrix[j][i] = euclid_dist
 
     @classmethod
-    def make_euclid_2d_int_matrix_from_a_file(cls, file_path):
+    def make_euclid_2d_distance_int_matrix_from_a_file(cls, file_path):
         return_matrix = []
         euclidian_points_file = open(file=file_path, mode='r')
 
         for line in euclidian_points_file:
-            coordinates = cls.split_integer_coordinates_improved(line)
+            coordinates = cls.split_cientific_notation_coordinates_improved(line)
             row = [coordinates[1], coordinates[2]]
             return_matrix.append(row)
 
         return return_matrix
 
     @classmethod
-    def split_integer_coordinates_improved(cls, string):
+    def split_cientific_notation_coordinates_improved(cls, string):
         splitted_coordinate = []
         current_coordinate = None
         incomplete_coordinate = False
@@ -62,11 +62,11 @@ class CientificNotationMatrix(Matrix):
         return splitted_coordinate
 
 
-if __name__ == '__main__':
-    from os import getcwd
-    from os.path import dirname
-    d2_matrix = CientificNotationMatrix(rows_size=2392, columns_size=2392)
-    d2_matrix.construct_matrix_from_euclid_int_dist_2d_file(file_path=r"{}\tsp\files\pr2392\TSP_pr2392.txt".format(dirname(getcwd())))
-    print(len(d2_matrix.matrix))
-    d2_matrix.matrix_printer()
+# if __name__ == '__main__':
+#     from os import getcwd
+#     from os.path import dirname
+#     d2_matrix = CientificNotationMatrix(rows_size=2392, columns_size=2392)
+#     d2_matrix.construct_matrix_from_euclid_int_dist_2d_file(file_path=r"{}\tsp\files\pr2392\TSP_pr2392.txt".format(dirname(getcwd())))
+#     print(len(d2_matrix.matrix))
+#     d2_matrix.matrix_printer()
 

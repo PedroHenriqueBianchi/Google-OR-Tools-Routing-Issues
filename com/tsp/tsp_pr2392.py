@@ -9,13 +9,12 @@ from pytz import timezone
 from datetime import datetime
 from matplotlib import pyplot
 
-
-
 # Os fatores que se alteram são as dimensões e o tipo da matriz, os nomes nos logs e nas rotas e o tipo do calculo
 # (Reorganizar em uma classe e fazer os scripts de cada instancia)
 
 
-file_name = f"tsp_pr2392_{datetime.now(timezone('America/Sao_Paulo'))}".replace(" ", "_").replace(".", "_").replace(":", "_")
+file_name = f"tsp_pr2392_{datetime.now(timezone('America/Sao_Paulo'))}".replace(" ", "_").replace(".", "_").replace(":",
+                                                                                                                    "_")
 file_name += ".log"
 
 log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -60,7 +59,6 @@ def print_solution(manager, routing, solution, strategy, points_matrix, time_lim
         pyplot.plot(x, y, 'ro')
 
         while not routing.IsEnd(index):
-            # plan_output += f' {format(manager.IndexToNode(index) + 1)} ->'
             plan_output += f' {index + 1} ->'
             previous_index = index
             index = solution.Value(routing.NextVar(index))
@@ -70,13 +68,25 @@ def print_solution(manager, routing, solution, strategy, points_matrix, time_lim
                 x1, y1 = points_matrix[previous_index]
                 x2, y2 = points_matrix[index]
                 pyplot.plot(x2, y2, 'ro')
+
+        index = routing.Start(0)
+        while not routing.IsEnd(index):
+            previous_index = index
+            index = solution.Value(routing.NextVar(index))
+
+            if not routing.IsEnd(index):
+                x1, y1 = points_matrix[previous_index]
+                x2, y2 = points_matrix[index]
                 pyplot.plot([x1, x2], [y1, y2], 'k-')
 
         plan_output += f' {format(manager.IndexToNode(index) + 1)}\n'
         print(plan_output)
         logger.info(plan_output)
 
-        pyplot.savefig(r"{}\tsp\files\pr2392\solutions_images\{}".format(dirname(getcwd()), (file_name + "_" + strategy + ".png")))
+        pyplot.savefig(
+            r"{}\tsp\files\pr2392\solutions_images\{}".format(dirname(getcwd()), (file_name + "_" + strategy + ".png")),
+            format='png',
+            dpi=1200)
         pyplot.close()
 
 
@@ -94,11 +104,20 @@ def print_opt_solution(opt_file_path, distance_matrix, points_matrix):
 
         x1, y1 = points_matrix[previous_index]
         x2, y2 = points_matrix[index]
-        pyplot.plot(x1, y1, 'ro')
-        pyplot.plot(x2, y2, 'ro')
+        pyplot.plot(x1, y1, 'ro', markersize=2)
+        pyplot.plot(x2, y2, 'ro', markersize=2)
+
+        previous_index = index
+
+    opt_file = open(file=opt_file_path, mode='r')
+    for line in opt_file:
+        index = int(line.strip()) - 1
+
+        x1, y1 = points_matrix[previous_index]
+        x2, y2 = points_matrix[index]
 
         if index != previous_index:
-            pyplot.plot([x1, x2], [y1, y2], 'k-')
+            pyplot.plot([x1, x2], [y1, y2], 'k-', linewidth=1)
 
         previous_index = index
 
@@ -112,7 +131,10 @@ def print_opt_solution(opt_file_path, distance_matrix, points_matrix):
     print(plan_output)
     logger.info(plan_output)
 
-    pyplot.savefig(r"{}\tsp\files\pr2392\solutions_images\{}".format(dirname(getcwd()), (file_name + "_opt_route.png")))
+    pyplot.axis("off")
+    pyplot.savefig(r"{}\tsp\files\pr2392\solutions_images\{}".format(dirname(getcwd()), (file_name + "_opt_route.png")),
+                   format='png',
+                   dpi=1200)
     pyplot.close()
 
 
@@ -211,4 +233,4 @@ def main(time_limit, log_search):
 
 
 if __name__ == '__main__':
-    main(time_limit=30, log_search=False)
+    main(time_limit=10, log_search=False)

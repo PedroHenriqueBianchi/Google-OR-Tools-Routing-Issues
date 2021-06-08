@@ -6,22 +6,122 @@ class Matrix:
     rows_size = None
     columns_size = None
     points_matrix = None
+    matrix_type = None
+    coordinates_type = None
+    calc_dist_type = None
 
-    def __init__(self, rows_size, columns_size):
+    def __init__(self, rows_size, columns_size, matrix_type, coordinates_type, calc_dist_type):
         self.rows_size = rows_size
         self.columns_size = columns_size
+        self.matrix_type = matrix_type
+        self.coordinates_type = coordinates_type
+        self.calc_dist_type = calc_dist_type
         self.matrix = [[0 for col in range(columns_size)] for row in range(rows_size)]
 
-    @classmethod
-    def calc_euclid_dist(cls, x0, x1, y0, y1):
+    @staticmethod
+    def calc_euclid_dist(x0, x1, y0, y1):
         xd = x0 - x1
         yd = y0 - y1
 
         return round(sqrt(xd * xd + yd * yd))
 
-    @classmethod
-    def split_coordinates(cls, string, separator, number_of_points):
-        return string.split(sep=separator, maxsplit=number_of_points + 1)
+    def classify_matrix(self, file_path):
+        if self.matrix_type.casefold() == 'TSPLIB'.casefold():
+            return self.make_points_matrix_from_a_file(
+                file_path=file_path,
+                coord_type=self.coordinates_type
+            )
+
+    def classify_dist_calc(self, x0, x1, y0, y1):
+        if self.calc_dist_type.casefold() == 'EUCLIDEAN'.casefold():
+            return self.calc_euclid_dist(x0=x0, x1=x1, y0=y0, y1=y1)
+
+    def construct_matrix_from_dist_file(self, file_path):
+        self.points_matrix = self.classify_matrix(file_path=file_path)
+
+        for i in range(self.rows_size):
+            self.matrix[i][i] = 0
+
+            for j in range(i + 1, self.columns_size):
+                distance = self.classify_dist_calc(
+                    x0=self.points_matrix[i][0],
+                    x1=self.points_matrix[j][0],
+                    y0=self.points_matrix[i][1],
+                    y1=self.points_matrix[j][1]
+                )
+
+                self.matrix[i][j] = distance
+                self.matrix[j][i] = distance
+
+    def make_points_matrix_from_a_file(self, file_path, coord_type):
+        return_matrix = []
+
+        points_file = open(file=file_path, mode='r')
+
+        for line in points_file:
+            coordinates = self.split_coordinates_improved(
+                string=line,
+                coord_type=coord_type
+            )
+            row = [coordinates[1], coordinates[2]]
+            return_matrix.append(row)
+
+        return return_matrix
+
+    def split_coordinates_improved(self, string, coord_type):
+        splitted_coordinate = []
+        current_coordinate = None
+        incomplete_coordinate = False
+
+        string = string + ' '
+
+        for char in string:
+            if char != ' ':
+                if incomplete_coordinate:
+                    current_coordinate = current_coordinate + char
+                else:
+                    current_coordinate = char
+                    incomplete_coordinate = True
+            else:
+                if incomplete_coordinate:
+                    splitted_coordinate.append(
+                        self.classify_coordinate(
+                            coordinate=current_coordinate,
+                            coord_type=coord_type
+                        )
+                    )
+                incomplete_coordinate = False
+                current_coordinate = None
+
+        return splitted_coordinate
+
+    def classify_coordinate(self, coordinate, coord_type):
+        if coord_type.casefold() == 'int':
+            return self.int_coordinate(coordinate=coordinate)
+        if coord_type.casefold() == 'float':
+            return self.float_coordinate(coordinate=coordinate)
+        if coord_type.casefold() == 'scientific_notation':
+            return self.scientific_notation_coordinate(coordinate=coordinate)
+
+    @staticmethod
+    def int_coordinate(coordinate):
+        return int(coordinate)
+
+    @staticmethod
+    def float_coordinate(coordinate):
+        return int(coordinate)
+
+    @staticmethod
+    def scientific_notation_coordinate(coordinate):
+        if len(coordinate) > 4:
+            current_coordinate = coordinate.rstrip()
+            power = int(current_coordinate[-2:])
+            current_coordinate = float(current_coordinate[:-4])
+            multiplier = int(pow(10, power))
+            current_coordinate = current_coordinate * multiplier
+            return round(current_coordinate)
+        else:
+            return int(coordinate)
 
     def matrix_printer(self):
         s = [[str(e) for e in row] for row in self.matrix]
@@ -30,14 +130,9 @@ class Matrix:
         table = [fmt.format(*row) for row in s]
         print('\n'.join(table))
 
-
-# if __name__ == '__main__':
-#     matriz = [[0 for col in range(280)] for row in range(280)]
-#     s = [[str(e) for e in row] for row in matriz]
-#     lens = [max(map(len, col)) for col in zip(*s)]
-#     fmt = '\t'.join('{{:{}}}'.format(x) for x in lens)
-#     table = [fmt.format(*row) for row in s]
-#     print('\n'.join(table))
+    @staticmethod
+    def split_coordinates(string, separator, number_of_points):
+        return string.split(sep=separator, maxsplit=number_of_points + 1)
 
 # if __name__ == '__main__':
 #     xd = 288 - 228

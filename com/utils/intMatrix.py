@@ -3,7 +3,7 @@ from com.utils.matrix import Matrix
 
 class IntMatrix(Matrix):
     def construct_matrix_from_euclid_int_dist_2d_file(self, file_path):
-        self.points_matrix = self.make_euclid_2d_int_matrix_from_a_file(file_path=file_path)
+        self.points_matrix = self.make_euclid_2d_distance_int_matrix_from_a_file(file_path=file_path)
 
         for i in range(self.rows_size):
             self.matrix[i][i] = 0
@@ -18,7 +18,7 @@ class IntMatrix(Matrix):
                 self.matrix[j][i] = euclid_dist
 
     @classmethod
-    def make_euclid_2d_int_matrix_from_a_file(cls, file_path):
+    def make_euclid_2d_distance_int_matrix_from_a_file(cls, file_path):
         return_matrix = []
         euclidian_points_file = open(file=file_path, mode='r')
 
@@ -53,11 +53,11 @@ class IntMatrix(Matrix):
         return splitted_coordinate
 
 
-if __name__ == '__main__':
-    from os import getcwd
-    from os.path import dirname
-    d2_matrix = IntMatrix(rows_size=280, columns_size=280)
-    d2_matrix.construct_matrix_from_euclid_int_dist_2d_file(file_path=r"{}\tsp\files\a280\TSP_a280.txt".format(dirname(getcwd())))
-    print(len(d2_matrix.matrix))
-    d2_matrix.matrix_printer()
+# if __name__ == '__main__':
+#     from os import getcwd
+#     from os.path import dirname
+#     d2_matrix = IntMatrix(rows_size=280, columns_size=280)
+#     d2_matrix.construct_matrix_from_euclid_int_dist_2d_file(file_path=r"{}\tsp\files\a280\TSP_a280.txt".format(dirname(getcwd())))
+#     print(len(d2_matrix.matrix))
+#     d2_matrix.matrix_printer()
 
