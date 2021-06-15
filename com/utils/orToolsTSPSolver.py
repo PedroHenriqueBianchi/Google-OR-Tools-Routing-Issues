@@ -21,8 +21,8 @@ class OrToolsTSPSolver:
     strategies: list = None
     log_search_on_terminal: bool = None
     dpi_on_image_solution: int = None
-    marker_size_on_image_solution: int = None
-    line_width_on_image_solution: int = None
+    marker_size_on_image_solution: float = None
+    line_width_on_image_solution: float = None
     __logger = None
     __file_name = None
     __common_directory = None
@@ -38,12 +38,12 @@ class OrToolsTSPSolver:
             matrix_type: str,
             coordinates_type: str,
             calc_dist_type: str,
-            time_limit_seconds: int = 30,
+            time_limit_on_seconds_to_metaheuristics: int = 30,
             strategies: list = None,
             log_search_on_terminal: bool = False,
             dpi_on_image_solution: int = 1200,
-            marker_size_on_image_solution: int = 7,
-            line_width_on_image_solution: int = 2
+            marker_size_on_image_solution: float = 7,
+            line_width_on_image_solution: float = 2
     ):
         if strategies is None:
             strategies = ['GLOBAL_CHEAPEST_ARC']
@@ -54,7 +54,7 @@ class OrToolsTSPSolver:
         self.matrix_type = matrix_type
         self.coordinates_type = coordinates_type
         self.calc_dist_type = calc_dist_type
-        self.time_limit_seconds = time_limit_seconds
+        self.time_limit_seconds = time_limit_on_seconds_to_metaheuristics
         self.strategies = strategies
         self.log_search_on_terminal = log_search_on_terminal
         self.dpi_on_image_solution = dpi_on_image_solution
