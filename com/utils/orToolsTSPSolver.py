@@ -38,7 +38,7 @@ class OrToolsTSPSolver:
             matrix_type: str,
             coordinates_type: str,
             calc_dist_type: str,
-            time_limit_seconds: int = None,
+            time_limit_seconds: int = 30,
             strategies: list = None,
             log_search_on_terminal: bool = False,
             dpi_on_image_solution: int = 1200,
@@ -123,29 +123,56 @@ class OrToolsTSPSolver:
             self.global_cheapest_arc()
 
         if 'PATH_CHEAPEST_ARC' in self.strategies:
-            # ToDo PATH_CHEAPEST_ARC
-            pass
+            self.path_cheapest_arc()
 
         if 'GUIDED_LOCAL_SEARCH' in self.strategies:
-            # ToDo GUIDED_LOCAL_SEARCH
-            pass
-
-        if 'PRINT_OPT_SOLUTION' in self.strategies:
-            # ToDo PRINT_OPT_SOLUTION
-            pass
+            self.guided_local_search()
 
     def global_cheapest_arc(self):
         self.__prepare_solution()
+
         search_parameters = pywrapcp.DefaultRoutingSearchParameters()
         search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.GLOBAL_CHEAPEST_ARC
+
+        self.__logger.info(f'Start to solve problem with GLOBAL_CHEAPEST_ARC strategy')
         solution = self.__routing.SolveWithParameters(search_parameters)
+        self.__logger.info(f'End to solve problem with GLOBAL_CHEAPEST_ARC strategy')
+
         self.__log_solution(strategy='GLOBAL_CHEAPEST_ARC', solution=solution)
         self.__plot_solution(strategy='GLOBAL_CHEAPEST_ARC', solution=solution)
+
+    def path_cheapest_arc(self):
+        self.__prepare_solution()
+
+        search_parameters = pywrapcp.DefaultRoutingSearchParameters()
+        search_parameters.first_solution_strategy = routing_enums_pb2.FirstSolutionStrategy.PATH_CHEAPEST_ARC
+
+        self.__logger.info(f'Start to solve problem with PATH_CHEAPEST_ARC strategy')
+        solution = self.__routing.SolveWithParameters(search_parameters)
+        self.__logger.info(f'End to solve problem with PATH_CHEAPEST_ARC strategy')
+
+        self.__log_solution(strategy='PATH_CHEAPEST_ARC', solution=solution)
+        self.__plot_solution(strategy='PATH_CHEAPEST_ARC', solution=solution)
+
+    def guided_local_search(self):
+        self.__prepare_solution()
+
+        search_parameters = pywrapcp.DefaultRoutingSearchParameters()
+        search_parameters.local_search_metaheuristic = routing_enums_pb2.LocalSearchMetaheuristic.GUIDED_LOCAL_SEARCH
+        search_parameters.time_limit.seconds = self.time_limit_seconds
+        search_parameters.log_search = self.log_search_on_terminal
+
+        self.__logger.info(f'Start to solve problem with GUIDED_LOCAL_SEARCH strategy')
+        solution = self.__routing.SolveWithParameters(search_parameters)
+        self.__logger.info(f'End to solve problem with GUIDED_LOCAL_SEARCH strategy')
+
+        self.__log_solution(strategy='GUIDED_LOCAL_SEARCH', solution=solution)
+        self.__plot_solution(strategy='GUIDED_LOCAL_SEARCH', solution=solution)
 
     def __log_solution(self, strategy, solution):
         print(f"Logging solution achieved by strategy: {strategy}")
 
-        if strategy.casefold() in ['GUIDED_LOCAL_SEARCH']:
+        if strategy in ['GUIDED_LOCAL_SEARCH']:
             self.__logger.info(
                 f'Solution achieved by {strategy} strategy with time limit on {self.time_limit_seconds} seconds')
         else:
@@ -169,7 +196,7 @@ class OrToolsTSPSolver:
         if solution is not None:
             index = self.__routing.Start(0)
             x, y = self.__model_data['points_matrix'][index]
-            pyplot.plot(x, y, 'ro')
+            pyplot.plot(x, y, 'ro', markersize=self.marker_size_on_image_solution)
 
             while not self.__routing.IsEnd(index):
                 index = solution.Value(self.__routing.NextVar(index))
@@ -187,6 +214,10 @@ class OrToolsTSPSolver:
                     x1, y1 = self.__model_data['points_matrix'][previous_index]
                     x2, y2 = self.__model_data['points_matrix'][index]
                     pyplot.plot([x1, x2], [y1, y2], 'k-', linewidth=self.line_width_on_image_solution)
+                else:
+                    x1, y1 = self.__model_data['points_matrix'][previous_index]
+                    x2, y2 = self.__model_data['points_matrix'][self.__routing.Start(0)]
+                    pyplot.plot([x1, x2], [y1, y2], 'k-', linewidth=self.line_width_on_image_solution)
 
             pyplot.axis("off")
             pyplot.savefig(
@@ -199,3 +230,100 @@ class OrToolsTSPSolver:
                 dpi=self.dpi_on_image_solution
             )
             pyplot.close()
+
+    def log_and_plot_optimum_solution(self):
+        try:
+            self.__log_optimum_solution()
+            self.__plot_optimum_solution()
+        except Exception as e:
+            print("Problem opening optimum solution file!")
+            self.__logger.info("Problem opening optimum solution file!")
+            self.__logger.info(f"Resulting on the error: {str(e)}")
+
+    def __log_optimum_solution(self):
+        print(f"Logging optimum solution to the problem {self.problem_name}")
+
+        opt_file_path = r"{}\tsp\files\{}\TSP_{}_opt_tour.txt".format(
+            self.__common_directory,
+            self.problem_name,
+            self.problem_name
+        )
+
+        opt_file = open(
+            file=opt_file_path,
+            mode='r'
+        )
+
+        plan_output = 'Route on opt file:\n'
+        route_distance = 0
+        index = 0
+        previous_index = 0
+
+        for line in opt_file:
+            index = int(line.strip()) - 1
+            plan_output += f'{index + 1} -> '
+            route_distance += self.__model_data['distance_matrix'][index][previous_index]
+            previous_index = index
+
+        plan_output += '1'
+        route_distance += self.__model_data['distance_matrix'][index][0]
+
+        self.__logger.info("Optimum Solution")
+        self.__logger.info(f'Objective: {route_distance} Unit of Measure')
+        self.__logger.info(plan_output)
+
+    def __plot_optimum_solution(self):
+        print(f"Plotting optimum solution to the problem {self.problem_name}")
+
+        opt_file_path = r"{}\tsp\files\{}\TSP_{}_opt_tour.txt".format(
+            self.__common_directory,
+            self.problem_name,
+            self.problem_name
+        )
+
+        opt_file = open(
+            file=opt_file_path,
+            mode='r'
+        )
+
+        index = 0
+        previous_index = 0
+
+        for line in opt_file:
+            index = int(line.strip()) - 1
+            x1, y1 = self.__model_data['points_matrix'][previous_index]
+            x2, y2 = self.__model_data['points_matrix'][index]
+            pyplot.plot(x1, y1, 'ro', markersize=self.marker_size_on_image_solution)
+            pyplot.plot(x2, y2, 'ro', markersize=self.marker_size_on_image_solution)
+            previous_index = index
+
+        index = 0
+        previous_index = 0
+        opt_file = open(file=opt_file_path, mode='r')
+        for line in opt_file:
+            index = int(line.strip()) - 1
+
+            x1, y1 = self.__model_data['points_matrix'][previous_index]
+            x2, y2 = self.__model_data['points_matrix'][index]
+
+            if index != previous_index:
+                pyplot.plot([x1, x2], [y1, y2], 'k-', linewidth=self.line_width_on_image_solution)
+
+            previous_index = index
+
+        x1, y1 = self.__model_data['points_matrix'][index]
+        x2, y2 = self.__model_data['points_matrix'][0]
+
+        pyplot.plot([x1, x2], [y1, y2], 'k-', linewidth=self.line_width_on_image_solution)
+
+        pyplot.axis("off")
+        pyplot.savefig(
+            r"{}\tsp\files\{}\solutions_images\{}".format(
+                self.__common_directory,
+                self.problem_name,
+                (self.__file_name + "_OPTIMUM_ROUTE.png")
+            ),
+            format='png',
+            dpi=self.dpi_on_image_solution
+        )
+        pyplot.close()
