@@ -81,7 +81,7 @@ class OrToolsTSPSolver:
             coordinates_type=self.coordinates_type,
             calc_dist_type=self.calc_dist_type
         )
-        local_file_path = r"{}\tsp\files\{}\TSP_{}.txt".format(
+        local_file_path = r"{}\tsplib\files\{}\TSP_{}.txt".format(
             self.__common_directory,
             self.problem_name,
             self.problem_name
@@ -98,7 +98,7 @@ class OrToolsTSPSolver:
 
     def __setup_logger(self):
         basicConfig(
-            filename=r"{}\tsp\files\{}\logs\{}".format(
+            filename=r"{}\tsplib\files\{}\logs\{}".format(
                 self.__common_directory,
                 self.problem_name,
                 self.__file_name + ".log"
@@ -221,7 +221,7 @@ class OrToolsTSPSolver:
 
             pyplot.axis("off")
             pyplot.savefig(
-                r"{}\tsp\files\{}\solutions_images\{}".format(
+                r"{}\tsplib\files\{}\solutions_images\{}".format(
                     self.__common_directory,
                     self.problem_name,
                     (self.__file_name + "_" + strategy + ".png")
@@ -243,7 +243,7 @@ class OrToolsTSPSolver:
     def __log_optimum_solution(self):
         print(f"Logging optimum solution to the problem {self.problem_name}")
 
-        opt_file_path = r"{}\tsp\files\{}\TSP_{}_opt_tour.txt".format(
+        opt_file_path = r"{}\tsplib\files\{}\TSP_{}_opt_tour.txt".format(
             self.__common_directory,
             self.problem_name,
             self.problem_name
@@ -275,7 +275,7 @@ class OrToolsTSPSolver:
     def __plot_optimum_solution(self):
         print(f"Plotting optimum solution to the problem {self.problem_name}")
 
-        opt_file_path = r"{}\tsp\files\{}\TSP_{}_opt_tour.txt".format(
+        opt_file_path = r"{}\tsplib\files\{}\TSP_{}_opt_tour.txt".format(
             self.__common_directory,
             self.problem_name,
             self.problem_name
@@ -318,7 +318,7 @@ class OrToolsTSPSolver:
 
         pyplot.axis("off")
         pyplot.savefig(
-            r"{}\tsp\files\{}\solutions_images\{}".format(
+            r"{}\tsplib\files\{}\solutions_images\{}".format(
                 self.__common_directory,
                 self.problem_name,
                 (self.__file_name + "_OPTIMUM_ROUTE.png")
