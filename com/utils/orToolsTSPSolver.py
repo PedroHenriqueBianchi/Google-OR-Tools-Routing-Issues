@@ -81,13 +81,15 @@ class OrToolsTSPSolver:
             coordinates_type=self.coordinates_type,
             calc_dist_type=self.calc_dist_type
         )
-        local_file_path = r"{}\tsplib\files\{}\TSP_{}.txt".format(
+
+        local_file_path = r"{}\{}\files\{}\{}.txt".format(
             self.__common_directory,
+            self.matrix_type.casefold(),
             self.problem_name,
             self.problem_name
         )
 
-        matrix.construct_matrix_from_dist_file(file_path=local_file_path)
+        matrix.build_matrix(file_path=local_file_path)
 
         self.__model_data = {
             'distance_matrix': matrix.matrix,
@@ -98,8 +100,9 @@ class OrToolsTSPSolver:
 
     def __setup_logger(self):
         basicConfig(
-            filename=r"{}\tsplib\files\{}\logs\{}".format(
+            filename=r"{}\{}\files\{}\logs\{}".format(
                 self.__common_directory,
+                self.matrix_type.casefold(),
                 self.problem_name,
                 self.__file_name + ".log"
             ),
@@ -221,8 +224,9 @@ class OrToolsTSPSolver:
 
             pyplot.axis("off")
             pyplot.savefig(
-                r"{}\tsplib\files\{}\solutions_images\{}".format(
+                r"{}\{}\files\{}\solutions_images\{}".format(
                     self.__common_directory,
+                    self.matrix_type.casefold(),
                     self.problem_name,
                     (self.__file_name + "_" + strategy + ".png")
                 ),

@@ -25,20 +25,26 @@ class Matrix:
 
         return round(sqrt(xd * xd + yd * yd))
 
-    def classify_matrix(self, file_path):
-        if self.matrix_type.casefold() == 'TSPLIB'.casefold():
-            return self.make_points_matrix_from_a_file(
+    def build_matrix(self, file_path):
+        if self.matrix_type.casefold() == 'tsplib':
+            self.make_points_matrix_from_a_file(
+                file_path=file_path,
+                coord_type=self.coordinates_type
+            )
+
+            self.construct_matrix_from_dist_file(file_path=file_path)
+
+        if self.matrix_type.casefold() == 'real_world' or self.matrix_type.casefold() == 'rio_claro':
+            self.load_points_and_distance_matrices_from_a_file(
                 file_path=file_path,
                 coord_type=self.coordinates_type
             )
 
     def classify_dist_calc(self, x0, x1, y0, y1):
-        if self.calc_dist_type.casefold() == 'EUCLIDEAN'.casefold():
+        if self.calc_dist_type.casefold() == 'euclidean':
             return self.calc_euclid_dist(x0=x0, x1=x1, y0=y0, y1=y1)
 
     def construct_matrix_from_dist_file(self, file_path):
-        self.points_matrix = self.classify_matrix(file_path=file_path)
-
         for i in range(self.rows_size):
             self.matrix[i][i] = 0
 
@@ -54,8 +60,6 @@ class Matrix:
                 self.matrix[j][i] = distance
 
     def make_points_matrix_from_a_file(self, file_path, coord_type):
-        return_matrix = []
-
         points_file = open(file=file_path, mode='r')
 
         for line in points_file:
@@ -64,9 +68,44 @@ class Matrix:
                 coord_type=coord_type
             )
             row = [coordinates[1], coordinates[2]]
-            return_matrix.append(row)
+            self.points_matrix.append(row)
 
-        return return_matrix
+    def load_points_and_distance_matrices_from_a_file(self, file_path, coord_type):
+        distances_flag = False
+        points_flag = False
+        i = 0
+        j = 0
+
+        self.points_matrix = []
+
+        info_file = open(file=file_path, mode='r')
+
+        for line in info_file:
+            if distances_flag and i < self.rows_size:
+                if j >= self.columns_size:
+                    j = 0
+                    i += 1
+                else:
+                    self.matrix[i][j] = round(float(line))
+                    j += 1
+
+            if points_flag:
+                coordinates = self.split_coordinates_improved(
+                    string=line,
+                    coord_type=coord_type
+                )
+                row = [coordinates[1], coordinates[2]]
+                self.points_matrix.append(row)
+
+                if coordinates[0] == self.rows_size - 1:
+                    points_flag = False
+
+            if 'EDGE_WEIGHT_SECTION' in line:
+                distances_flag = True
+
+            if 'DISPLAY_DATA_SECTION' in line:
+                distances_flag = False
+                points_flag = True
 
     def split_coordinates_improved(self, string, coord_type):
         splitted_coordinate = []
@@ -133,6 +172,26 @@ class Matrix:
     @staticmethod
     def split_coordinates(string, separator, number_of_points):
         return string.split(sep=separator, maxsplit=number_of_points + 1)
+
+
+# if __name__ == '__main__':
+#     from os.path import dirname
+#     from os import getcwd
+#
+#     matrix = Matrix(21, 21, 'real_world', 'int', None)
+#
+#     local_file_path = r"{}\{}\files\{}\{}.txt".format(
+#         dirname(getcwd()),
+#         'real_world',
+#         'real_world_20',
+#         'real_world_20'
+#     )
+#
+#     matrix.build_matrix(local_file_path)
+#
+#     matrix.matrix_printer()
+#     print('\n')
+#     print(matrix.points_matrix)
 
 # if __name__ == '__main__':
 #     xd = 288 - 228

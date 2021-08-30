@@ -1,0 +1,14 @@
+2021-08-30 19:46:38,436 - root - INFO - Start to solve problem with GLOBAL_CHEAPEST_ARC strategy
+2021-08-30 19:46:38,443 - root - INFO - End to solve problem with GLOBAL_CHEAPEST_ARC strategy
+2021-08-30 19:46:38,443 - root - INFO - Solution achieved by GLOBAL_CHEAPEST_ARC strategy
+2021-08-30 19:46:38,443 - root - INFO - Objective: 32729 Unit of Measure
+2021-08-30 19:46:38,443 - root - INFO - Route for vehicle 1:
+ 1 -> 4 -> 10 -> 6 -> 19 -> 2 -> 8 -> 7 -> 9 -> 15 -> 14 -> 20 -> 18 -> 17 -> 21 -> 13 -> 16 -> 12 -> 3 -> 11 -> 5 -> 1
+
+2021-08-30 19:46:40,051 - root - INFO - Start to solve problem with PATH_CHEAPEST_ARC strategy
+2021-08-30 19:46:40,056 - root - INFO - End to solve problem with PATH_CHEAPEST_ARC strategy
+2021-08-30 19:46:40,056 - root - INFO - Solution achieved by PATH_CHEAPEST_ARC strategy
+2021-08-30 19:46:40,057 - root - INFO - Objective: 32592 Unit of Measure
+2021-08-30 19:46:40,057 - root - INFO - Route for vehicle 1:
+ 1 -> 4 -> 10 -> 6 -> 19 -> 2 -> 8 -> 7 -> 9 -> 15 -> 14 -> 20 -> 18 -> 16 -> 17 -> 13 -> 21 -> 12 -> 3 -> 11 -> 5 -> 1
+
