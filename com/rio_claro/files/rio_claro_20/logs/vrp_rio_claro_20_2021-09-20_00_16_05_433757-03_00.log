@@ -1,0 +1,19 @@
+2021-09-20 00:16:05,439 - root - INFO - Start to solve problem with GLOBAL_CHEAPEST_ARC strategy
+2021-09-20 00:16:35,068 - root - INFO - End to solve problem with GLOBAL_CHEAPEST_ARC strategy
+2021-09-20 00:16:35,069 - root - INFO - Solution achieved by GLOBAL_CHEAPEST_ARC strategy
+2021-09-20 00:16:35,069 - root - INFO - Max Allowed Route: 4.199959944444444  Hours
+2021-09-20 00:16:35,069 - root - INFO - Max Possible Route: 5.999942777777778  Hours
+2021-09-20 00:16:35,069 - root - INFO - Route for vehicle 0:
+ 1 -> 4 -> 2 -> 19 -> 6 -> 10 -> 1
+Distance of the route: 3.7679377777777776 Hours
+ 
+2021-09-20 00:16:35,069 - root - INFO - Route for vehicle 1:
+ 1 -> 9 -> 8 -> 7 -> 15 -> 14 -> 20 -> 1
+Distance of the route: 3.9564208333333335 Hours
+ 
+2021-09-20 00:16:35,069 - root - INFO - Route for vehicle 2:
+ 1 -> 11 -> 3 -> 12 -> 16 -> 18 -> 17 -> 13 -> 21 -> 5 -> 1
+Distance of the route: 3.7726261111111112 Hours
+ 
+2021-09-20 00:16:35,069 - root - INFO - Maximum of the route distances: 3.9564208333333335 Hours
+

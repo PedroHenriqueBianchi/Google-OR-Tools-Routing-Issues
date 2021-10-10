@@ -1,0 +1,19 @@
+2021-09-20 20:55:49,867 - root - INFO - Start to solve problem with GUIDED_LOCAL_SEARCH strategy
+2021-09-20 20:55:58,693 - root - INFO - End to solve problem with GUIDED_LOCAL_SEARCH strategy
+2021-09-20 20:55:58,693 - root - INFO - Solution achieved by GUIDED_LOCAL_SEARCH strategy with time limit on 60 seconds
+2021-09-20 20:55:58,693 - root - INFO - Max Allowed Route: 4.199959944444444  Hours
+2021-09-20 20:55:58,693 - root - INFO - Max Possible Route: 5.999942777777778  Hours
+2021-09-20 20:55:58,693 - root - INFO - Route for vehicle 0:
+ 1 -> 14 -> 18 -> 17 -> 1
+Distance of the route: 0.0 Hours
+ 
+2021-09-20 20:55:58,693 - root - INFO - Route for vehicle 1:
+ 1 -> 1
+Distance of the route: 0.0 Hours
+ 
+2021-09-20 20:55:58,694 - root - INFO - Route for vehicle 2:
+ 1 -> 9 -> 10 -> 16 -> 4 -> 2 -> 5 -> 15 -> 11 -> 6 -> 3 -> 8 -> 12 -> 20 -> 21 -> 7 -> 13 -> 19 -> 1
+Distance of the route: 0.0 Hours
+ 
+2021-09-20 20:55:58,694 - root - INFO - Maximum of the route distances: 0.0 Hours
+
