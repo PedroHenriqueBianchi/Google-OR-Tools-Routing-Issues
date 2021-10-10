@@ -95,7 +95,8 @@ class OrToolsTSPSolver:
             'distance_matrix': matrix.matrix,
             'num_vehicles': 1,
             'depot': 0,
-            'points_matrix': matrix.points_matrix
+            'points_matrix': matrix.points_matrix,
+            'max_route': matrix.max_route
         }
 
     def __setup_logger(self):
@@ -182,7 +183,23 @@ class OrToolsTSPSolver:
             self.__logger.info(f'Solution achieved by {strategy} strategy')
 
         if solution is not None:
-            self.__logger.info(f'Objective: {format(solution.ObjectiveValue())} Unit of Measure')
+            if self.matrix_type.casefold() == 'real_world':
+                result_in_hours = solution.ObjectiveValue() / 3600000000
+                max_allowed_route_in_hours = self.__model_data["max_route"] / 3600000000
+
+                self.__logger.info(f'Objective: {format(result_in_hours)} Horas')
+                self.__logger.info(f'Max Allowed Route: {format(max_allowed_route_in_hours)} Horas')
+                self.__logger.info(f'Length per max route: {format(result_in_hours / max_allowed_route_in_hours)}')
+            elif self.matrix_type.casefold() == 'rio_claro':
+                result_in_hours = solution.ObjectiveValue() / 3600000
+                max_allowed_route_in_hours = self.__model_data["max_route"] / 3600000
+
+                self.__logger.info(f'Objective: {format(result_in_hours)} Horas')
+                self.__logger.info(f'Max Allowed Route: {format(max_allowed_route_in_hours)} Horas')
+                self.__logger.info(f'Length per max route: {format(result_in_hours / max_allowed_route_in_hours)}')
+            else:
+                self.__logger.info(f'Objective: {format(solution.ObjectiveValue())} Unit of Measure')
+
             index = self.__routing.Start(0)
             plan_output = 'Route for vehicle 1:\n'
 
@@ -223,6 +240,50 @@ class OrToolsTSPSolver:
                     pyplot.plot([x1, x2], [y1, y2], 'k-', linewidth=self.line_width_on_image_solution)
 
             pyplot.axis("off")
+
+            # if self.matrix_type.casefold() == 'real_world' or self.matrix_type.casefold() == 'rio_claro':
+            #     pyplot.savefig(
+            #         r"{}\{}\files\{}\solutions_images\{}".format(
+            #             self.__common_directory,
+            #             self.matrix_type.casefold(),
+            #             self.problem_name,
+            #             (self.__file_name + "_" + strategy + ".png")
+            #         ),
+            #         format='png',
+            #         dpi=self.dpi_on_image_solution,
+            #         transparent=True
+            #     )
+            #     pyplot.close()
+            #
+            #     background_map_image = Image.open(
+            #         r"{}\{}\files\{}".format(
+            #             self.__common_directory,
+            #             self.matrix_type.casefold(),
+            #             (self.matrix_type.casefold() + "_background.png")
+            #         )
+            #     )
+            #
+            #     solution_graph_image = Image.open(
+            #         r"{}\{}\files\{}\solutions_images\{}".format(
+            #             self.__common_directory,
+            #             self.matrix_type.casefold(),
+            #             self.problem_name,
+            #             (self.__file_name + "_" + strategy + ".png")
+            #         )
+            #     )
+            #
+            #     background_map_image.paste(solution_graph_image, (0, 0), mask=solution_graph_image)
+            #
+            #     background_map_image.save(fp=r"{}\{}\files\{}\solutions_images\{}".format(
+            #             self.__common_directory,
+            #             self.matrix_type.casefold(),
+            #             self.problem_name,
+            #             (self.__file_name + "_" + strategy + "_with_backgroud.png")
+            #         )
+            #     )
+            #
+            #     return
+
             pyplot.savefig(
                 r"{}\{}\files\{}\solutions_images\{}".format(
                     self.__common_directory,

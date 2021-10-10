@@ -9,6 +9,7 @@ class Matrix:
     matrix_type = None
     coordinates_type = None
     calc_dist_type = None
+    max_route = None
 
     def __init__(self, rows_size, columns_size, matrix_type, coordinates_type, calc_dist_type):
         self.rows_size = rows_size
@@ -16,6 +17,7 @@ class Matrix:
         self.matrix_type = matrix_type
         self.coordinates_type = coordinates_type
         self.calc_dist_type = calc_dist_type
+        self.points_matrix = []
         self.matrix = [[0 for col in range(columns_size)] for row in range(rows_size)]
 
     @staticmethod
@@ -76,17 +78,19 @@ class Matrix:
         i = 0
         j = 0
 
-        self.points_matrix = []
-
         info_file = open(file=file_path, mode='r')
 
         for line in info_file:
+            if 'MAX_ALLOWED_ROUTE' in line:
+                aux = line.split(':')
+                self.max_route = int(aux[1])
+
             if distances_flag and i < self.rows_size:
                 if j >= self.columns_size:
                     j = 0
                     i += 1
                 else:
-                    self.matrix[i][j] = round(float(line))
+                    self.matrix[i][j] = int(line)
                     j += 1
 
             if points_flag:
@@ -174,24 +178,24 @@ class Matrix:
         return string.split(sep=separator, maxsplit=number_of_points + 1)
 
 
-# if __name__ == '__main__':
-#     from os.path import dirname
-#     from os import getcwd
-#
-#     matrix = Matrix(21, 21, 'real_world', 'int', None)
-#
-#     local_file_path = r"{}\{}\files\{}\{}.txt".format(
-#         dirname(getcwd()),
-#         'real_world',
-#         'real_world_20',
-#         'real_world_20'
-#     )
-#
-#     matrix.build_matrix(local_file_path)
-#
-#     matrix.matrix_printer()
-#     print('\n')
-#     print(matrix.points_matrix)
+if __name__ == '__main__':
+    from os.path import dirname
+    from os import getcwd
+
+    matrix = Matrix(21, 21, 'real_world', 'int', None)
+
+    local_file_path = r"{}\{}\files\{}\{}.txt".format(
+        dirname(getcwd()),
+        'real_world',
+        'real_world_20',
+        'real_world_20'
+    )
+
+    matrix.build_matrix(local_file_path)
+
+    matrix.matrix_printer()
+    print('\n')
+    print(matrix.points_matrix)
 
 # if __name__ == '__main__':
 #     xd = 288 - 228
