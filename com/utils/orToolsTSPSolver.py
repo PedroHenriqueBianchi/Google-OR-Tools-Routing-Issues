@@ -241,6 +241,7 @@ class OrToolsTSPSolver:
 
             pyplot.axis("off")
 
+            # TRYING TO PRINT ROUTES ON MAP IMAGE
             # if self.matrix_type.casefold() == 'real_world' or self.matrix_type.casefold() == 'rio_claro':
             #     pyplot.savefig(
             #         r"{}\{}\files\{}\solutions_images\{}".format(
