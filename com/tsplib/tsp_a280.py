@@ -8,9 +8,10 @@ if __name__ == '__main__':
         matrix_type='TSPLIB',
         coordinates_type='int',
         calc_dist_type='EUCLIDEAN',
-        strategies=['GLOBAL_CHEAPEST_ARC', 'PATH_CHEAPEST_ARC', 'GUIDED_LOCAL_SEARCH'],
-        time_limit_on_seconds_to_metaheuristics=800
+        # strategies=['GLOBAL_CHEAPEST_ARC', 'PATH_CHEAPEST_ARC', 'GUIDED_LOCAL_SEARCH'],
+        strategies=['GUIDED_LOCAL_SEARCH'],
+        time_limit_on_seconds_to_metaheuristics=730
     )
 
     solver.execute_strategies()
-    solver.log_and_plot_optimum_solution()
+    # solver.log_and_plot_optimum_solution()

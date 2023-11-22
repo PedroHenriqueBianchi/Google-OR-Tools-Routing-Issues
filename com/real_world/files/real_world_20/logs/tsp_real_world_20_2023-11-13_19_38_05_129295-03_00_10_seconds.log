@@ -1,0 +1,9 @@
+2023-11-13 19:38:05,135 - root - INFO - Start to solve problem with GUIDED_LOCAL_SEARCH strategy
+2023-11-13 19:38:15,136 - root - INFO - End to solve problem with GUIDED_LOCAL_SEARCH strategy
+2023-11-13 19:38:15,136 - root - INFO - Solution achieved by GUIDED_LOCAL_SEARCH strategy with time limit on 10 seconds
+2023-11-13 19:38:15,136 - root - INFO - Objective: 3.1192081519444446 Horas
+2023-11-13 19:38:15,136 - root - INFO - Max Allowed Route: 5.999933333333333 Horas
+2023-11-13 19:38:15,136 - root - INFO - Length per max route: 0.5198738016996486
+2023-11-13 19:38:15,136 - root - INFO - Route for vehicle 1:
+ 1 -> 21 -> 8 -> 9 -> 12 -> 16 -> 17 -> 7 -> 11 -> 3 -> 2 -> 20 -> 5 -> 18 -> 13 -> 15 -> 14 -> 6 -> 4 -> 10 -> 19 -> 1
+

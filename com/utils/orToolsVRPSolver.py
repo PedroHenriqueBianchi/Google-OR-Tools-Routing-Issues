@@ -46,7 +46,7 @@ class OrToolsVRPSolver:
             upper_limit_coefficient: float = 0.8,
             time_limit_on_seconds_to_metaheuristics: int = 30,
             strategies: list = None,
-            log_search_on_terminal: bool = False,
+            log_search_on_terminal: bool = True,
             dpi_on_image_solution: int = 1200,
             marker_size_on_image_solution: float = 7,
             line_width_on_image_solution: float = 2
@@ -109,17 +109,30 @@ class OrToolsVRPSolver:
         }
 
     def __setup_logger(self):
-        basicConfig(
-            filename=r"{}\{}\files\{}\logs\{}".format(
-                self.__common_directory,
-                self.matrix_type.casefold(),
-                self.problem_name,
-                self.__file_name + ".log"
-            ),
-            filemode='a',
-            level=INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
+        if 'GUIDED_LOCAL_SEARCH' in self.strategies:
+            basicConfig(
+                filename=r"{}\{}\files\{}\logs\{}".format(
+                    self.__common_directory,
+                    self.matrix_type.casefold(),
+                    self.problem_name,
+                    (self.__file_name + "_" + str(self.time_limit_seconds) + "_seconds.log")
+                ),
+                filemode='a',
+                level=INFO,
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            )
+        else:
+            basicConfig(
+                filename=r"{}\{}\files\{}\logs\{}".format(
+                    self.__common_directory,
+                    self.matrix_type.casefold(),
+                    self.problem_name,
+                    self.__file_name + ".log"
+                ),
+                filemode='a',
+                level=INFO,
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            )
 
     def __distance_callback(self, from_index, to_index):
         from_node = self.__manager.IndexToNode(from_index)
@@ -137,6 +150,8 @@ class OrToolsVRPSolver:
             True,
             self.dimension_name
         )
+        distance_dimension = self.__routing.GetDimensionOrDie(self.dimension_name)
+        distance_dimension.SetGlobalSpanCostCoefficient(int((self.__model_data['max_route'] * self.upper_limit_coefficient)/10))
 
     def execute_strategies(self):
         if 'GLOBAL_CHEAPEST_ARC' in self.strategies:
@@ -159,7 +174,7 @@ class OrToolsVRPSolver:
         self.__logger.info(f'End to solve problem with GLOBAL_CHEAPEST_ARC strategy')
 
         self.__log_solution(strategy='GLOBAL_CHEAPEST_ARC', solution=solution)
-        #self.__plot_solution(strategy='GLOBAL_CHEAPEST_ARC', solution=solution)
+        self.__plot_solution(strategy='GLOBAL_CHEAPEST_ARC', solution=solution)
 
     def path_cheapest_arc(self):
         self.__prepare_solution()
@@ -172,7 +187,7 @@ class OrToolsVRPSolver:
         self.__logger.info(f'End to solve problem with PATH_CHEAPEST_ARC strategy')
 
         self.__log_solution(strategy='PATH_CHEAPEST_ARC', solution=solution)
-        #self.__plot_solution(strategy='PATH_CHEAPEST_ARC', solution=solution)
+        self.__plot_solution(strategy='PATH_CHEAPEST_ARC', solution=solution)
 
     def guided_local_search(self):
         self.__prepare_solution()
@@ -187,7 +202,7 @@ class OrToolsVRPSolver:
         self.__logger.info(f'End to solve problem with GUIDED_LOCAL_SEARCH strategy')
 
         self.__log_solution(strategy='GUIDED_LOCAL_SEARCH', solution=solution)
-        #self.__plot_solution(strategy='GUIDED_LOCAL_SEARCH', solution=solution)
+        self.__plot_solution(strategy='GUIDED_LOCAL_SEARCH', solution=solution)
 
     def __log_solution(self, strategy, solution):
         print(f"Logging solution achieved by strategy: {strategy}")
@@ -258,47 +273,49 @@ class OrToolsVRPSolver:
                 point = self.__manager.IndexToNode(index)
                 x, y = self.__model_data['points_matrix'][point]
                 pyplot.plot(x, y, 'ro', markersize=self.marker_size_on_image_solution)
-
                 while not self.__routing.IsEnd(index):
                     index = solution.Value(self.__routing.NextVar(index))
                     point = self.__manager.IndexToNode(index)
-
-                    if not self.__routing.IsEnd(index):
-                        x2, y2 = self.__model_data['points_matrix'][point]
-                        pyplot.plot(x2, y2, 'ro', markersize=self.marker_size_on_image_solution)
+                    x, y = self.__model_data['points_matrix'][point]
+                    pyplot.plot(x, y, 'ro', markersize=self.marker_size_on_image_solution)
 
                 index = self.__routing.Start(vehicle_id)
                 point = self.__manager.IndexToNode(index)
                 while not self.__routing.IsEnd(index):
                     index = solution.Value(self.__routing.NextVar(index))
-
                     previous_point = point
                     point = self.__manager.IndexToNode(index)
 
-                    if not self.__routing.IsEnd(index):
-                        x1, y1 = self.__model_data['points_matrix'][previous_point]
-                        x2, y2 = self.__model_data['points_matrix'][point]
-                        pyplot.plot([x1, x2], [y1, y2], 'k-', linewidth=self.line_width_on_image_solution)
-                    else:
-                        index = self.__routing.Start(vehicle_id)
-                        point = self.__manager.IndexToNode(index)
-                        x1, y1 = self.__model_data['points_matrix'][previous_point]
-                        x2, y2 = self.__model_data['points_matrix'][point]
-                        pyplot.plot([x1, x2], [y1, y2], 'k-', linewidth=self.line_width_on_image_solution)
+                    x1, y1 = self.__model_data['points_matrix'][previous_point]
+                    x2, y2 = self.__model_data['points_matrix'][point]
+                    pyplot.plot([x1, x2], [y1, y2], 'k-', linewidth=self.line_width_on_image_solution)
 
             pyplot.axis("off")
 
-            pyplot.savefig(
-                r"{}\{}\files\{}\solutions_images\{}".format(
-                    self.__common_directory,
-                    self.matrix_type.casefold(),
-                    self.problem_name,
-                    (self.__file_name + "_" + strategy + ".png")
-                ),
-                format='png',
-                dpi=self.dpi_on_image_solution
-            )
-            pyplot.close()
+            if strategy == 'GUIDED_LOCAL_SEARCH':
+                pyplot.savefig(
+                    r"{}\{}\files\{}\solutions_images\{}".format(
+                        self.__common_directory,
+                        self.matrix_type.casefold(),
+                        self.problem_name,
+                        (self.__file_name + "_" + strategy + "_" + str(self.time_limit_seconds) + "_seconds.png")
+                    ),
+                    format='png',
+                    dpi=self.dpi_on_image_solution
+                )
+                pyplot.close()
+            else:
+                pyplot.savefig(
+                    r"{}\{}\files\{}\solutions_images\{}".format(
+                        self.__common_directory,
+                        self.matrix_type.casefold(),
+                        self.problem_name,
+                        (self.__file_name + "_" + strategy + ".png")
+                    ),
+                    format='png',
+                    dpi=self.dpi_on_image_solution
+                )
+                pyplot.close()
 
     def log_and_plot_optimum_solution(self):
         try:

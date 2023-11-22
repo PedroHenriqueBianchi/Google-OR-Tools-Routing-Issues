@@ -8,10 +8,11 @@ if __name__ == '__main__':
         matrix_type='real_world',
         coordinates_type='int',
         calc_dist_type=None,
-        strategies=['GLOBAL_CHEAPEST_ARC', 'PATH_CHEAPEST_ARC', 'GUIDED_LOCAL_SEARCH'],
+        # strategies=['GLOBAL_CHEAPEST_ARC', 'PATH_CHEAPEST_ARC', 'GUIDED_LOCAL_SEARCH'],
+        strategies=['GUIDED_LOCAL_SEARCH'],
         marker_size_on_image_solution=4,
         line_width_on_image_solution=1,
-        time_limit_on_seconds_to_metaheuristics=10
+        time_limit_on_seconds_to_metaheuristics=60
     )
 
     solver.execute_strategies()

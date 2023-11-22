@@ -100,17 +100,30 @@ class OrToolsTSPSolver:
         }
 
     def __setup_logger(self):
-        basicConfig(
-            filename=r"{}\{}\files\{}\logs\{}".format(
-                self.__common_directory,
-                self.matrix_type.casefold(),
-                self.problem_name,
-                self.__file_name + ".log"
-            ),
-            filemode='a',
-            level=INFO,
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
-        )
+        if 'GUIDED_LOCAL_SEARCH' in self.strategies:
+            basicConfig(
+                filename=r"{}\{}\files\{}\logs\{}".format(
+                    self.__common_directory,
+                    self.matrix_type.casefold(),
+                    self.problem_name,
+                    (self.__file_name + "_" + str(self.time_limit_seconds) + "_seconds.log")
+                ),
+                filemode='a',
+                level=INFO,
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            )
+        else:
+            basicConfig(
+                filename=r"{}\{}\files\{}\logs\{}".format(
+                    self.__common_directory,
+                    self.matrix_type.casefold(),
+                    self.problem_name,
+                    self.__file_name + ".log"
+                ),
+                filemode='a',
+                level=INFO,
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+            )
 
     def __distance_callback(self, from_index, to_index):
         from_node = self.__manager.IndexToNode(from_index)
@@ -241,60 +254,29 @@ class OrToolsTSPSolver:
 
             pyplot.axis("off")
 
-            # TRYING TO PRINT ROUTES ON MAP IMAGE
-            # if self.matrix_type.casefold() == 'real_world' or self.matrix_type.casefold() == 'rio_claro':
-            #     pyplot.savefig(
-            #         r"{}\{}\files\{}\solutions_images\{}".format(
-            #             self.__common_directory,
-            #             self.matrix_type.casefold(),
-            #             self.problem_name,
-            #             (self.__file_name + "_" + strategy + ".png")
-            #         ),
-            #         format='png',
-            #         dpi=self.dpi_on_image_solution,
-            #         transparent=True
-            #     )
-            #     pyplot.close()
-            #
-            #     background_map_image = Image.open(
-            #         r"{}\{}\files\{}".format(
-            #             self.__common_directory,
-            #             self.matrix_type.casefold(),
-            #             (self.matrix_type.casefold() + "_background.png")
-            #         )
-            #     )
-            #
-            #     solution_graph_image = Image.open(
-            #         r"{}\{}\files\{}\solutions_images\{}".format(
-            #             self.__common_directory,
-            #             self.matrix_type.casefold(),
-            #             self.problem_name,
-            #             (self.__file_name + "_" + strategy + ".png")
-            #         )
-            #     )
-            #
-            #     background_map_image.paste(solution_graph_image, (0, 0), mask=solution_graph_image)
-            #
-            #     background_map_image.save(fp=r"{}\{}\files\{}\solutions_images\{}".format(
-            #             self.__common_directory,
-            #             self.matrix_type.casefold(),
-            #             self.problem_name,
-            #             (self.__file_name + "_" + strategy + "_with_backgroud.png")
-            #         )
-            #     )
-            #
-            #     return
+            if strategy == 'GUIDED_LOCAL_SEARCH':
+                pyplot.savefig(
+                    r"{}\{}\files\{}\solutions_images\{}".format(
+                        self.__common_directory,
+                        self.matrix_type.casefold(),
+                        self.problem_name,
+                        (self.__file_name + "_" + strategy + "_" + str(self.time_limit_seconds) + "_seconds.png")
+                    ),
+                    format='png',
+                    dpi=self.dpi_on_image_solution
+                )
+            else:
+                pyplot.savefig(
+                    r"{}\{}\files\{}\solutions_images\{}".format(
+                        self.__common_directory,
+                        self.matrix_type.casefold(),
+                        self.problem_name,
+                        (self.__file_name + "_" + strategy + ".png")
+                    ),
+                    format='png',
+                    dpi=self.dpi_on_image_solution
+                )
 
-            pyplot.savefig(
-                r"{}\{}\files\{}\solutions_images\{}".format(
-                    self.__common_directory,
-                    self.matrix_type.casefold(),
-                    self.problem_name,
-                    (self.__file_name + "_" + strategy + ".png")
-                ),
-                format='png',
-                dpi=self.dpi_on_image_solution
-            )
             pyplot.close()
 
     def log_and_plot_optimum_solution(self):

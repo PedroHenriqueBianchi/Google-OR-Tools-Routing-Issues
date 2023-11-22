@@ -8,7 +8,9 @@ if __name__ == '__main__':
         matrix_type='rio_claro',
         coordinates_type='int',
         calc_dist_type=None,
-        strategies=['GLOBAL_CHEAPEST_ARC', 'PATH_CHEAPEST_ARC'],
+        #strategies=['GLOBAL_CHEAPEST_ARC', 'PATH_CHEAPEST_ARC', 'GUIDED_LOCAL_SEARCH'],
+        strategies=['GUIDED_LOCAL_SEARCH'],
+        time_limit_on_seconds_to_metaheuristics=10,
         marker_size_on_image_solution=2,
         line_width_on_image_solution=0.8
     )

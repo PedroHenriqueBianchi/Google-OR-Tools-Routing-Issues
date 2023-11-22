@@ -1,0 +1,19 @@
+2023-11-18 02:22:48,270 - root - INFO - Start to solve problem with PATH_CHEAPEST_ARC strategy
+2023-11-18 02:23:06,611 - root - INFO - End to solve problem with PATH_CHEAPEST_ARC strategy
+2023-11-18 02:23:06,611 - root - INFO - Solution achieved by PATH_CHEAPEST_ARC strategy
+2023-11-18 02:23:06,611 - root - INFO - Max Allowed Route: 4.499957083333333  Hours
+2023-11-18 02:23:06,611 - root - INFO - Max Possible Route: 5.999942777777778  Hours
+2023-11-18 02:23:06,611 - root - INFO - Route for vehicle 0:
+ 1 -> 4 -> 2 -> 19 -> 6 -> 10 -> 1
+Distance of the route: 3.7679377777777776 Hours
+ 
+2023-11-18 02:23:06,611 - root - INFO - Route for vehicle 1:
+ 1 -> 14 -> 20 -> 7 -> 8 -> 15 -> 9 -> 1
+Distance of the route: 3.9582977777777777 Hours
+ 
+2023-11-18 02:23:06,611 - root - INFO - Route for vehicle 2:
+ 1 -> 11 -> 3 -> 12 -> 16 -> 18 -> 17 -> 13 -> 21 -> 5 -> 1
+Distance of the route: 3.7726261111111112 Hours
+ 
+2023-11-18 02:23:06,611 - root - INFO - Maximum of the route distances: 3.9582977777777777 Hours
+

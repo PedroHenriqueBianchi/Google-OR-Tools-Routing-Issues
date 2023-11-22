@@ -1,0 +1,39 @@
+2023-11-21 18:03:18,154 - root - INFO - Start to solve problem with GUIDED_LOCAL_SEARCH strategy
+2023-11-21 19:03:18,157 - root - INFO - End to solve problem with GUIDED_LOCAL_SEARCH strategy
+2023-11-21 19:03:18,157 - root - INFO - Solution achieved by GUIDED_LOCAL_SEARCH strategy with time limit on 3600 seconds
+2023-11-21 19:03:18,157 - root - INFO - Max Allowed Route: 6.0  Hours
+2023-11-21 19:03:18,157 - root - INFO - Max Possible Route: 12.0  Hours
+2023-11-21 19:03:18,157 - root - INFO - Route for vehicle 0:
+ 1 -> 192 -> 194 -> 115 -> 138 -> 48 -> 164 -> 131 -> 80 -> 65 -> 173 -> 137 -> 156 -> 44 -> 94 -> 78 -> 152 -> 64 -> 6 -> 1
+Distance of the route: 4.212155555555555 Hours
+ 
+2023-11-21 19:03:18,157 - root - INFO - Route for vehicle 1:
+ 1 -> 172 -> 134 -> 73 -> 46 -> 37 -> 72 -> 67 -> 123 -> 162 -> 43 -> 143 -> 189 -> 24 -> 199 -> 33 -> 154 -> 15 -> 18 -> 124 -> 90 -> 1
+Distance of the route: 4.223399722222222 Hours
+ 
+2023-11-21 19:03:18,157 - root - INFO - Route for vehicle 2:
+ 1 -> 129 -> 142 -> 14 -> 50 -> 116 -> 103 -> 87 -> 77 -> 155 -> 185 -> 132 -> 108 -> 21 -> 96 -> 112 -> 55 -> 7 -> 47 -> 104 -> 61 -> 30 -> 1
+Distance of the route: 4.213760833333334 Hours
+ 
+2023-11-21 19:03:18,158 - root - INFO - Route for vehicle 3:
+ 1 -> 171 -> 182 -> 117 -> 197 -> 165 -> 40 -> 39 -> 151 -> 186 -> 88 -> 141 -> 69 -> 169 -> 25 -> 1
+Distance of the route: 4.22524 Hours
+ 
+2023-11-21 19:03:18,158 - root - INFO - Route for vehicle 4:
+ 1 -> 11 -> 63 -> 179 -> 35 -> 71 -> 81 -> 148 -> 9 -> 12 -> 107 -> 145 -> 79 -> 101 -> 163 -> 56 -> 168 -> 41 -> 51 -> 10 -> 106 -> 3 -> 102 -> 1
+Distance of the route: 4.224716111111111 Hours
+ 
+2023-11-21 19:03:18,158 - root - INFO - Route for vehicle 5:
+ 1 -> 200 -> 190 -> 53 -> 153 -> 32 -> 52 -> 70 -> 198 -> 136 -> 28 -> 8 -> 38 -> 84 -> 146 -> 110 -> 26 -> 135 -> 188 -> 128 -> 89 -> 45 -> 187 -> 114 -> 118 -> 105 -> 140 -> 29 -> 181 -> 1
+Distance of the route: 4.108852777777778 Hours
+ 
+2023-11-21 19:03:18,158 - root - INFO - Route for vehicle 6:
+ 1 -> 158 -> 91 -> 99 -> 157 -> 13 -> 76 -> 31 -> 60 -> 86 -> 85 -> 144 -> 49 -> 4 -> 75 -> 176 -> 178 -> 100 -> 159 -> 98 -> 68 -> 54 -> 83 -> 17 -> 183 -> 66 -> 174 -> 193 -> 184 -> 119 -> 127 -> 62 -> 16 -> 177 -> 92 -> 196 -> 139 -> 95 -> 1
+Distance of the route: 4.207988055555556 Hours
+ 
+2023-11-21 19:03:18,158 - root - INFO - Route for vehicle 7:
+ 1 -> 23 -> 160 -> 201 -> 195 -> 150 -> 167 -> 175 -> 166 -> 133 -> 5 -> 22 -> 20 -> 42 -> 34 -> 2 -> 161 -> 93 -> 113 -> 191 -> 109 -> 27 -> 57 -> 82 -> 130 -> 122 -> 170 -> 149 -> 19 -> 111 -> 125 -> 97 -> 74 -> 36 -> 126 -> 58 -> 180 -> 121 -> 120 -> 147 -> 59 -> 1
+Distance of the route: 4.1757019444444445 Hours
+ 
+2023-11-21 19:03:18,158 - root - INFO - Maximum of the route distances: 4.22524 Hours
+

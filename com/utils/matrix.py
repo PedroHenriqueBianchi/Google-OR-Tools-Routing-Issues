@@ -34,7 +34,7 @@ class Matrix:
                 coord_type=self.coordinates_type
             )
 
-            self.construct_matrix_from_dist_file(file_path=file_path)
+            self.construct_distance_matrix_from_points_matrix()
 
         if self.matrix_type.casefold() == 'real_world' or self.matrix_type.casefold() == 'rio_claro':
             self.load_points_and_distance_matrices_from_a_file(
@@ -46,7 +46,7 @@ class Matrix:
         if self.calc_dist_type.casefold() == 'euclidean':
             return self.calc_euclid_dist(x0=x0, x1=x1, y0=y0, y1=y1)
 
-    def construct_matrix_from_dist_file(self, file_path):
+    def construct_distance_matrix_from_points_matrix(self):
         for i in range(self.rows_size):
             self.matrix[i][i] = 0
 
@@ -141,17 +141,11 @@ class Matrix:
     def classify_coordinate(self, coordinate, coord_type):
         if coord_type.casefold() == 'int':
             return self.int_coordinate(coordinate=coordinate)
-        if coord_type.casefold() == 'float':
-            return self.float_coordinate(coordinate=coordinate)
         if coord_type.casefold() == 'scientific_notation':
             return self.scientific_notation_coordinate(coordinate=coordinate)
 
     @staticmethod
     def int_coordinate(coordinate):
-        return int(coordinate)
-
-    @staticmethod
-    def float_coordinate(coordinate):
         return int(coordinate)
 
     @staticmethod
@@ -178,25 +172,28 @@ class Matrix:
         return string.split(sep=separator, maxsplit=number_of_points + 1)
 
 
-if __name__ == '__main__':
-    from os.path import dirname
-    from os import getcwd
-
-    matrix = Matrix(21, 21, 'real_world', 'int', None)
-
-    local_file_path = r"{}\{}\files\{}\{}.txt".format(
-        dirname(getcwd()),
-        'real_world',
-        'real_world_20',
-        'real_world_20'
-    )
-
-    matrix.build_matrix(local_file_path)
-
-    matrix.matrix_printer()
-    print('\n')
-    print(matrix.points_matrix)
-
+# Practice Examples, used during the development of the matrix class
+#
+# if __name__ == '__main__':
+#     from os.path import dirname
+#     from os import getcwd
+#
+#     matrix = Matrix(21, 21, 'real_world', 'int', None)
+#
+#     local_file_path = r"{}\{}\files\{}\{}.txt".format(
+#         dirname(getcwd()),
+#         'real_world',
+#         'real_world_20',
+#         'real_world_20'
+#     )
+#
+#     matrix.build_matrix(local_file_path)
+#
+#     matrix.matrix_printer()
+#     print('\n')
+#     print(matrix.points_matrix)
+#
+#
 # if __name__ == '__main__':
 #     xd = 288 - 228
 #     yd = 149 - 169

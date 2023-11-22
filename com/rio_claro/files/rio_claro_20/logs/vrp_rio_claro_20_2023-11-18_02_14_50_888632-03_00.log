@@ -1,0 +1,19 @@
+2023-11-18 02:14:50,893 - root - INFO - Start to solve problem with GLOBAL_CHEAPEST_ARC strategy
+2023-11-18 02:15:22,132 - root - INFO - End to solve problem with GLOBAL_CHEAPEST_ARC strategy
+2023-11-18 02:15:22,132 - root - INFO - Solution achieved by GLOBAL_CHEAPEST_ARC strategy
+2023-11-18 02:15:22,133 - root - INFO - Max Allowed Route: 4.199959944444444  Hours
+2023-11-18 02:15:22,133 - root - INFO - Max Possible Route: 5.999942777777778  Hours
+2023-11-18 02:15:22,133 - root - INFO - Route for vehicle 0:
+ 1 -> 4 -> 2 -> 19 -> 6 -> 10 -> 1
+Distance of the route: 3.7679377777777776 Hours
+ 
+2023-11-18 02:15:22,133 - root - INFO - Route for vehicle 1:
+ 1 -> 9 -> 15 -> 8 -> 7 -> 20 -> 17 -> 13 -> 1
+Distance of the route: 4.091346388888889 Hours
+ 
+2023-11-18 02:15:22,133 - root - INFO - Route for vehicle 2:
+ 1 -> 11 -> 3 -> 12 -> 16 -> 18 -> 14 -> 21 -> 5 -> 1
+Distance of the route: 4.059075277777778 Hours
+ 
+2023-11-18 02:15:22,133 - root - INFO - Maximum of the route distances: 4.091346388888889 Hours
+
